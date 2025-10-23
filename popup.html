@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>GitHub Sound</title>
+    <style>
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 12px; }
+      h4 { margin: 0 0 12px; }
+      label { font-size: 12px; color: #666; }
+      input, button { width: 100%; box-sizing: border-box; margin-top: 6px; padding: 8px; }
+      .section { margin-top: 12px; }
+    </style>
+  </head>
+  <body>
+    <h4>GitHub Sound</h4>
+
+    <button id="enable">Enable Sound</button>
+
+    <div class="section">
+      <label>GitHub PAT (optional, for background polling)</label>
+      <input id="pat" type="password" placeholder="ghp_xxx..." />
+    </div>
+
+    <div class="section">
+      <label>Watch repos (owner/repo, comma separated)</label>
+      <input id="repos" type="text" placeholder="myorg/myrepo, other/repo" />
+    </div>
+
+    <div class="section">
+      <button id="save">Save</button>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

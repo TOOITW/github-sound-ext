@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "GitHub Success Sound",
+  "version": "0.1",
+  "description": "在 GitHub Actions 成功 / PR 合併 / push 成功時播放音效。",
+  "permissions": [
+    "storage",
+    "alarms",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://github.com/*",
+    "https://api.github.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "GitHub Sound"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*"],
+      "js": ["content_script.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["sounds/*"],
+      "matches": ["https://github.com/*"]
+    }
+  ]
+}
