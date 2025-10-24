@@ -108,27 +108,41 @@ async function tick() {
   }
 }
 
-function notifyAndPlay(repo, run) {
+async function ensureOffscreen() {
+  if (chrome.offscreen && chrome.offscreen.hasDocument) {
+    const has = await chrome.offscreen.hasDocument();
+    if (has) return;
+    await chrome.offscreen.createDocument({
+      url: 'offscreen.html',
+      reasons: ['AUDIO_PLAYBACK'],
+      justification: 'Play a sound when a GitHub Actions run succeeds.'
+    });
+  }
+}
+
+async function notifyAndPlay(repo, run) {
   console.log('[GHSound] SUCCESS 🎉', repo, run.id);
 
-  // 在 SW 直接播放（使用者需曾按過「Enable Sound」）
-  const url = chrome.runtime.getURL('sounds/success.mp3');
-  const a = new Audio(url);
-  a.play().catch(err => console.warn('play failed:', err));
+  // 1) 用 offscreen 播放音效（service worker 不能 new Audio）
+  try {
+    await ensureOffscreen();
+    await chrome.runtime.sendMessage({ type: 'OFFSCREEN_PLAY' });
+  } catch (e) {
+    console.warn('[GHSound] offscreen play failed:', e);
+  }
 
-  // 有開 github 分頁則同步廣播（可選）
+  // 2) 有開著 GitHub 分頁就順便廣播（可選）
   chrome.tabs.query({}, (tabs) => {
     for (const t of tabs) {
       if (t.url?.includes('github.com')) {
         chrome.tabs.sendMessage(t.id, { type: 'PLAY_SOUND', repo, run }, () => {
-          if (chrome.runtime.lastError) {
-            // 沒注入 content_script 的分頁會報錯，忽略即可
-          }
+          if (chrome.runtime.lastError) { /* 沒 content_script 就忽略 */ }
         });
       }
     }
   });
 
+  // 3) 系統通知（本身沒有音效）
   chrome.notifications?.create({
     type: 'basic',
     iconUrl: 'icons/icon128.png',
