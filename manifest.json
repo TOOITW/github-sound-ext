@@ -11,16 +11,23 @@
     "notifications",
     "offscreen"
   ],
-  "host_permissions": [
-    "https://github.com/*",
-    "https://api.github.com/*"
-  ],
+  "host_permissions": ["https://github.com/*", "https://api.github.com/*"],
   "background": {
     "service_worker": "background.js"
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "GitHub Sound"
+    "default_title": "GitHub Sound",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon64.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon64.png",
+    "128": "icons/icon128.png"
   },
   "content_scripts": [
     {
@@ -31,8 +38,9 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["sounds/*"],
-      "matches": ["https://github.com/*"]
+      "resources": ["sounds/*", "icons/*"],
+      "matches": ["<all_urls>"]
     }
-  ]
+  ],
+  "offscreen_pages": ["offscreen.html"]
 }

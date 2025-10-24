@@ -189,3 +189,14 @@ async function setBadgeSuccess() {
   // 幾秒後清空
   setTimeout(() => chrome.action.setBadgeText({ text: "" }), 6000);
 }
+
+
+// chrome.action.setBadgeText({ text: "OK" });
+// chrome.action.setBadgeBackgroundColor({ color: "#22c55e" });
+
+// chrome.notifications.create("test", {
+//   type: "basic",
+//   iconUrl: "icons/icon128.png",
+//   title: "✅ 測試通知",
+//   message: "這是 GitHub Success Sound 的測試通知"
+// });
